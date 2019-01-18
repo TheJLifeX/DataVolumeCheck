@@ -107,31 +107,31 @@ function saveData(xhttp) {
 function showNotification(restDaten, transfertLimit) {
     chrome.storage.sync.get([
             "checkedRadio",
-            "input1_Value",
-            "input2_Value",
+            "userNotificationValueInPercent",
+            "userNotificationValueInMB",
             "isNotificationAlreadyShow"
         ],
         function (data) {
-            if (typeof data.input1_Value !== "undefined" && data.input1_Value !== -1) {
+            if (typeof data.userNotificationValueInPercent !== "undefined" && data.userNotificationValueInPercent !== -1) {
                 const percent = (Math.round(restDaten * 100 / transfertLimit));
-                if (data.checkedRadio === 1 && percent < data.input1_Value && !data.isNotificationAlreadyShow) {
-                    typeNotification(1, data.input1_Value);
+                if (data.checkedRadio === 1 && percent < data.userNotificationValueInPercent && !data.isNotificationAlreadyShow) {
+                    typeNotification(1, data.userNotificationValueInPercent);
                     chrome.storage.sync.set({
                         isNotificationAlreadyShow: true
                     });
                 }
-                if (percent > data.input1_Value) {
+                if (percent > data.userNotificationValueInPercent) {
                     clearAllNotifications();
                 }
             }
-            if (typeof data.input2_Value !== "undefined" && data.input2_Value !== -1) {
-                if (data.checkedRadio === 2 && restDaten < data.input2_Value && !data.isNotificationAlreadyShow) {
-                    typeNotification(2, data.input2_Value);
+            if (typeof data.userNotificationValueInMB !== "undefined" && data.userNotificationValueInMB !== -1) {
+                if (data.checkedRadio === 2 && restDaten < data.userNotificationValueInMB && !data.isNotificationAlreadyShow) {
+                    typeNotification(2, data.userNotificationValueInMB);
                     chrome.storage.sync.set({
                         isNotificationAlreadyShow: true
                     });
                 }
-                if (restDaten > data.input2_Value) {
+                if (restDaten > data.userNotificationValueInMB) {
                     clearAllNotifications();
                 }
             }
@@ -145,7 +145,7 @@ function showNotification(restDaten, transfertLimit) {
  */
 function typeNotification(type, userThershold) {
     if (type === 1) {
-        createNotification("01", "Du hast jetzt weniger als " + userThershold + "% Datenvolumen.");
+        createNotification("01", "Du hast jetzt weniger als " + userThershold + " % Datenvolumen.");
     }
     if (type === 2) {
         createNotification("02", "Du hast jetzt weniger als " + userThershold + " MB Datenvolumen.");

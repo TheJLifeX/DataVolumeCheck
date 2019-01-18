@@ -7,8 +7,8 @@
 // "gesendet",
 // "empfangen",
 // "checkedRadio",
-// "input1_Value",
-// "input2_Value"
+// "userNotificationValueInPercent",
+// "userNotificationValueInMB"
 
 // (accompli) recuper les donnes dans le local storage et afficher les donnees.
 chrome.storage.sync.get([
@@ -16,8 +16,8 @@ chrome.storage.sync.get([
     "gesendet",
     "empfangen",
     "checkedRadio",
-    "input1_Value",
-    "input2_Value",
+    "userNotificationValueInPercent",
+    "userNotificationValueInMB",
     "transfertLimit"
   ],
   function (data) {
@@ -35,34 +35,34 @@ chrome.storage.sync.get([
     if (typeof data.checkedRadio !== "undefined") {
       if (data.checkedRadio === 1) {
         document.querySelector("#radio1").checked = true;
-        let input2 = document.querySelector("#input2");
+        const input2 = document.querySelector("#input2");
         input2.disabled = true;
         input2.style.opacity = 0.3;
       } else if (data.checkedRadio === 2) {
         document.querySelector("#radio2").checked = true;
-        let input1 = document.querySelector("#input1");
+        const input1 = document.querySelector("#input1");
         input1.disabled = true;
         input1.style.opacity = 0.3;
       }
     } else {
       document.querySelector("#radio1").checked = true;
-      let input2 = document.querySelector("#input2");
+      const input2 = document.querySelector("#input2");
       input2.disabled = true;
       input2.style.opacity = 0.3;
     }
-    if (typeof data.input1_Value !== "undefined" && data.input1_Value !== -1) {
-      document.querySelector("#input1").value = data.input1_Value;
+    if (typeof data.userNotificationValueInPercent !== "undefined" && data.userNotificationValueInPercent !== -1) {
+      document.querySelector("#input1").value = data.userNotificationValueInPercent;
     }
-    if (typeof data.input2_Value !== "undefined" && data.input2_Value !== -1) {
-      document.querySelector("#input2").value = data.input2_Value;
+    if (typeof data.userNotificationValueInMB !== "undefined" && data.userNotificationValueInMB !== -1) {
+      document.querySelector("#input2").value = data.userNotificationValueInMB;
     }
   }
 );
 
-// TODO les features des le popup
+// (accompli) les features des le popup
 
 // slide up/down :: config and details
-document.querySelector("#details").addEventListener("click", function (event) {
+document.querySelector("#details").addEventListener("click", function () {
   document.querySelector("#box2").classList.add("hide");
   document.querySelector("#config-icon").src = "/icon/baseline-expand_more-24px.svg";
   document.querySelector("#box1").classList.toggle('hide');
@@ -71,7 +71,7 @@ document.querySelector("#details").addEventListener("click", function (event) {
     document.querySelector("#details-icon").src = "/icon/baseline-expand_more-24px.svg";
   }
 });
-document.querySelector("#config").addEventListener("click", function (event) {
+document.querySelector("#config").addEventListener("click", function () {
   document.querySelector("#box1").classList.add("hide");
   document.querySelector("#details-icon").src = "/icon/baseline-expand_more-24px.svg";
   document.querySelector("#box2").classList.toggle('hide');
@@ -81,33 +81,9 @@ document.querySelector("#config").addEventListener("click", function (event) {
   }
 });
 
-// changement de couleur lorsque le pourcentage est dessous de 25.
-function showProgressCircle(percent) {
-  let bar;
-  if (percent <= 25) {
-    bar = new ldBar("#progressCircle", {
-      "stroke": '#f00',
-      "stroke-width": 10,
-      "preset": "bubble",
-      "fill": "data:ldbar/res,bubble(#DC143C,#fff,50,1)"
-    });
-    document.querySelector("#restDaten").style.color = "brown";
-  } else {
-    bar = new ldBar("#progressCircle", {
-      "stroke": '#f00',
-      "stroke-width": 10,
-      "preset": "bubble"
-    });
-  }
-  bar.set(percent);
-}
-
-// TODO gerer le cas ou l utilisateur ne se situe pas chez lui
-// spript et puis html
-
-// TODO restreindre les possibilte au niveau des inputs (les valeurs possible que l utilisateur peut entrer)
+// (accompli) restreindre les possibilte au niveau des inputs (les valeurs possible que l utilisateur peut entrer)
 /**
- * done :: l utilisateur ne peut entrer que des nombres de 0 a 9 respectivement d'une longueur de 2 et 4 
+ * l'utilisateur ne peut entrer que des nombres de 0 a 9 respectivement d'une longueur de 2 et 4 
  * caractere dans le input1 et input2.
  */
 document.querySelectorAll("#input1, #input2").forEach((element, index) => {
@@ -133,37 +109,38 @@ document.querySelectorAll("#input1, #input2").forEach((element, index) => {
 // (accompli) enregistrer dans le local storage la config de l utilisateur
 
 document.querySelector("#save").addEventListener("click", (event) => {
-  var doneIcon = event.target.nextElementSibling;
+  // show done icon
+  const doneIcon = event.target.nextElementSibling;
   doneIcon.style.visibility = "visible";
+
   const checkedRadio = parseInt(document.querySelector("#radio1:checked, #radio2:checked").value);
-  const value3;
+
+  let userNotificationValueInPercent = -1;
   if (document.querySelector("#input1").value !== "") {
-    value3 = parseInt(document.querySelector("#input1").value);
-  } else {
-    value3 = -1;
+    userNotificationValueInPercent = parseInt(document.querySelector("#input1").value);
   }
-  let value4;
+
+  let userNotificationValueInMB = -1;
   if (document.querySelector("#input2").value !== "") {
-    value4 = parseInt(document.querySelector("#input2").value);
-  } else {
-    value4 = -1;
+    userNotificationValueInMB = parseInt(document.querySelector("#input2").value);
   }
 
 
   chrome.storage.sync.set({
     checkedRadio: checkedRadio,
-    input1_Value: value3,
-    input2_Value: value4,
+    userNotificationValueInPercent: userNotificationValueInPercent,
+    userNotificationValueInMB: userNotificationValueInMB,
     isNotificationAlreadyShow: false
-  }, function () {
-    console.log('User Config saved');
   });
+
+  // hidde done icon
   window.setTimeout(() => {
     doneIcon.style.visibility = "hidden";
   }, 1000);
+
 });
 
-// TODO reset button tout ce qui l entoure
+// (accompli) reset button tout ce qui l entoure
 document.querySelector("#reset").addEventListener("click", (event) => {
   var doneIcon = event.target.nextElementSibling;
   doneIcon.style.visibility = "visible";
@@ -172,8 +149,8 @@ document.querySelector("#reset").addEventListener("click", (event) => {
   document.querySelector("#input2").value = "";
   chrome.storage.sync.set({
     checkedRadio: 1,
-    input1_Value: -1,
-    input2_Value: -1,
+    userNotificationValueInPercent: -1,
+    userNotificationValueInMB: -1,
     isNotificationAlreadyShow: false
   }, function () {
     console.log('User Config reset');
@@ -183,28 +160,22 @@ document.querySelector("#reset").addEventListener("click", (event) => {
   }, 1000);
 });
 
-// TODO faire un test avec marius pour voir si il comprend tout.
-
 // TODO eventuellement repatir chaque groupe de tache dans un fichier js specifique.
 
-// TODO mettre le place le system de salution en fonction de l heure qu il est.
+// (accompli) mettre le place le system de salution en fonction de l heure qu il est.
 let hours = new Date().getHours();
-var guten = document.querySelector("#guten");
+var greeting = document.querySelector("#guten");
 if (hours >= 4 && hours < 10) {
-  guten.innerHTML = "Guten Morgen..."
+  greeting.innerHTML = "Guten Morgen..."
 } else if (hours >= 10 && hours < 18) {
-  guten.innerHTML = "Guten Tag..."
+  greeting.innerHTML = "Guten Tag..."
 } else if (hours >= 18 && hours <= 22) {
-  guten.innerHTML = "Guten Abend..."
+  greeting.innerHTML = "Guten Abend..."
 } else if (hours >= 22 && hours <= 23) {
-  guten.innerHTML = "Gute Nacht..."
+  greeting.innerHTML = "Gute Nacht..."
 } else {
-  guten.innerHTML = "Hi..."
+  greeting.innerHTML = "Hi..."
 }
-
-// TODO placer le nombre de mega restant en bas de la bulle !?.
-
-// implement Options page
 
 /// alert du bist nicht in dem Domain
 // if(document.querySelector("#xhttpsucces").innerText === ""){
@@ -212,8 +183,8 @@ if (hours >= 4 && hours < 10) {
 // }
 
 
-// cacher un input lorqu il n a pas ete selectionne
-var checkbox = document.querySelectorAll(".form-check-input");
+// (accompli) cacher un input lorqu il n a pas ete selectionne
+let checkbox = document.querySelectorAll(".form-check-input");
 checkbox[0].addEventListener("click", () => {
   var input2 = document.querySelector("#input2");
   input2.disabled = true;
@@ -231,23 +202,28 @@ checkbox[1].addEventListener("click", () => {
   input1.style.opacity = 0.3;
 });
 
-
-
-
-
-
-
-// let changeColor = document.getElementById('changeColor');
-// chrome.storage.sync.get('color', function (data) {
-//   changeColor.style.backgroundColor = data.color;
-//   changeColor.setAttribute('value', data.color);
-// });
-
-// changeColor.onclick = function (element) {
-//   let color = element.target.value;
-//   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-//     chrome.tabs.executeScript(
-//       tabs[0].id,
-//       { code: 'document.body.style.backgroundColor = "' + color + '";' });
-//   });
-// };
+// (accompli) changement de couleur lorsque le pourcentage est dessous de 25.
+/**
+ * show a progress circle corresponding to the  @param percent
+ * make a progress circle red if @param percent < 25 %  
+ * @param {number} percent - current rest data volume from user in percent
+ */
+function showProgressCircle(percent) {
+  let bar;
+  if (percent <= 25) {
+    bar = new ldBar("#progressCircle", {
+      "stroke": '#f00',
+      "stroke-width": 10,
+      "preset": "bubble",
+      "fill": "data:ldbar/res,bubble(#DC143C,#fff,50,1)"
+    });
+    document.querySelector("#restDaten").style.color = "brown";
+  } else {
+    bar = new ldBar("#progressCircle", {
+      "stroke": '#f00',
+      "stroke-width": 10,
+      "preset": "bubble"
+    });
+  }
+  bar.set(percent);
+}

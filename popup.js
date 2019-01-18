@@ -130,13 +130,13 @@ document.querySelectorAll("#input1, #input2").forEach((element, index) => {
 });
 
 
-// TODO enregistrer dans le local storage la config de l utilisateur
+// (accompli) enregistrer dans le local storage la config de l utilisateur
 
 document.querySelector("#save").addEventListener("click", (event) => {
   var doneIcon = event.target.nextElementSibling;
   doneIcon.style.visibility = "visible";
-  let value2 = parseInt(document.querySelector("#radio1:checked, #radio2:checked").value);
-  let value3;
+  const checkedRadio = parseInt(document.querySelector("#radio1:checked, #radio2:checked").value);
+  const value3;
   if (document.querySelector("#input1").value !== "") {
     value3 = parseInt(document.querySelector("#input1").value);
   } else {
@@ -151,9 +151,10 @@ document.querySelector("#save").addEventListener("click", (event) => {
 
 
   chrome.storage.sync.set({
-    checkedRadio: value2,
+    checkedRadio: checkedRadio,
     input1_Value: value3,
-    input2_Value: value4
+    input2_Value: value4,
+    isNotificationAlreadyShow: false
   }, function () {
     console.log('User Config saved');
   });
@@ -172,7 +173,8 @@ document.querySelector("#reset").addEventListener("click", (event) => {
   chrome.storage.sync.set({
     checkedRadio: 1,
     input1_Value: -1,
-    input2_Value: -1
+    input2_Value: -1,
+    isNotificationAlreadyShow: false
   }, function () {
     console.log('User Config reset');
   });

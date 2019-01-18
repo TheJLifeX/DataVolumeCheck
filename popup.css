@@ -1,0 +1,61 @@
+body {
+  min-width: 190px;
+}
+
+#restDaten {
+  font-size: 15px;
+  color: #3fb0ac;
+}
+
+.ldBar-label {
+  color: rgb(255, 255, 255);
+}
+
+.box {
+  overflow: hidden;
+  margin: 0 auto;
+  padding:5px;
+  padding-top: 5px;
+  transition: all 0.4s ease-in-out;
+}
+
+.hide {
+  height: 0;
+  display: none;
+}
+
+  /* .details-config{
+      position: absolute;
+      right: 0;
+  } */
+  /* .traffic{
+      position: relative;
+      float: left;
+  } */
+
+p {
+  font-size: 13px !important;
+}
+
+#select {
+  width: 69px;
+  height: 30px;
+}
+
+#progressCircle{
+  margin-left: 28px;
+  margin-bottom: 10px;
+}
+
+#config {
+  margin-left: 5px;
+  margin-bottom: 10px
+}
+input:checked{
+  pointer-events:none;
+  color:#AAA;
+  background:#F5F5F5;
+}
+
+
+  

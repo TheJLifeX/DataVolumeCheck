@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/loading-bar.css" />
+  <script type="text/javascript" src="/js/loading-bar.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div id="traffic">
+      <div> <span id="guten">Guten Tag</span><br> <strong id="name"></strong></div>
+      <div title="Deine restliche Datenvolumen in Prozent." class="label-center" id="progressCircle"></div>
+    </div>
+    <div class="detais-config">
+      <a id="details" style="cursor:pointer" class="badge badge-pill badge-light">details<img id="details-icon" src="/icon/baseline-expand_more-24px.svg"
+          alt="..."> </a>
+      <a id="config" style="cursor:pointer" class="badge badge-pill badge-light">config<img id="config-icon" src="/icon/baseline-expand_more-24px.svg"
+          alt="..."> </a>
+      <div id="box1" class="box hide">
+        <p><strong> <span id="restDaten"></span></strong> bleiben noch.</p>
+        <p><strong> <img src="/icon/upload.png" alt="..."> <span id="gesendet"></span> MB</strong> gesendet.</p>
+        <p><strong> <img src="/icon/download.png" alt="..."> <span id="empfangen"></span> MB</strong> empfangen.</p>
+        <p><strong> <img src="/icon/tachometer.png" alt="..."> <span id="limit"></span> MB</strong> limit.</p>
+      </div>
+      <div id="box2" class="box hide">
+        <strong>Benachrichtung:</strong>
+        <!-- <hr> -->
+        <p style="display: none;">
+          Jeweils nach
+          <select class="custom-select mr-sm-2 " id="select" size="1">
+            <option value="0" selected>...</option>
+            <option value="1">1 Go</option>
+            <option value="2">2 Go</option>
+            <option value="3">3 Go</option>
+            <option value="3">4 Go</option>
+          </select>
+          Datenverbrauch.
+        </p>
+        <hr>
+        <p>
+          Datenvolumen weniger als
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="exampleRadios" id="radio1" value="1" checked>
+            <label class="form-check-label" for="exampleRadios1">
+              <div class="input-group input-group-sm mb-3">
+                <input class="form-control input-sm" type="number" id="input1" placeholder="..." min="5" max="100"
+                  maxlength="2" />
+                <div class="input-group-append ">
+                  <span class="input-group-text"><strong>%</strong></span>
+                </div>
+              </div>
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="exampleRadios" id="radio2" value="2">
+            <label class="form-check-label" for="exampleRadios2">
+              <div class="input-group input-group-sm mb-3">
+                <input class="form-control input-sm" type="number" id="input2" placeholder="..." min="5" max="100"
+                  maxlength="6" />
+                <div class="input-group-append">
+                  <span class="input-group-text">MB</span>
+                </div>
+              </div>
+            </label>
+          </div>
+        </p>
+        <button id="reset" type="button" class="btn badge-pill btn-secondary btn-sm ">reset</button>
+        <img style="visibility:hidden;" src="/icon/done.png" alt="...">
+        <button id="save" type="button" class="btn badge-pill btn-primary btn-sm">save</button>
+        <img style="visibility:hidden;" src="/icon/done.png" alt="...">
+      </div>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+
+</html>

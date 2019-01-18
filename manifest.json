@@ -1,11 +1,19 @@
 {
   "name": "Datenvolumen Extension",
   "version": "1.0",
-  "description": "Hiermit kannst du deinen aktuellen Datenverbrauch ( von dem 10 Gb pro Woche) ansehen.",
-  "permissions": ["activeTab", "declarativeContent", "storage" , "notifications", "http://10.4.11.1/traffic.php"],
+  "description": "Hiermit kannst du deinen aktuellen Datenverbrauch ( z.B. von dem 10 Gb pro Woche) ansehen.",
+  "permissions": [
+    "activeTab",
+    "declarativeContent",
+    "storage",
+    "notifications",
+    "http://10.4.11.1/traffic.php"
+  ],
   "options_page": "options.html",
   "background": {
-    "scripts": ["background.js"],
+    "scripts": [
+      "background.js"
+    ],
     "persistent": true
   },
   "page_action": {

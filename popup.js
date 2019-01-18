@@ -1,6 +1,6 @@
 'use strict';
 
-// TODO creer un model qui pour l enregistrement des donnees de l utilisateur.
+// (accompli) creer un model pour l'enregistrement des donnees de l utilisateur.
 // json object :: javascript object
 // ou bien tout simplement la structure key-value de chrome.
 // "name",
@@ -11,37 +11,37 @@
 // "input1_Value",
 // "input2_Value"
 
-// TODO recuper les donnes dans le local storage et afficher les donnees.
+// (accompli) recuper les donnes dans le local storage et afficher les donnees.
 chrome.storage.sync.get([
-  "name",
-  "gesendet",
-  "empfangen",
-  "selectedIndex",
-  "checkedRadio",
-  "input1_Value",
-  "input2_Value"],
+    "name",
+    "gesendet",
+    "empfangen",
+    "selectedIndex",
+    "checkedRadio",
+    "input1_Value",
+    "input2_Value",
+    "transfertLimit"
+  ],
   function (data) {
     console.log(data);
-    // datenvolumen
-    const limit = 10737;
-    const percent = 100 - (Math.round((data.empfangen + data.gesendet) * 100 / limit));
+
+    const percent = 100 - (Math.round((data.empfangen + data.gesendet) * 100 / data.transfertLimit));
     showProgressCircle(percent);
     document.querySelector("#name").innerHTML = data.name;
     document.querySelector("#gesendet").innerHTML = " " + data.gesendet;
     document.querySelector("#empfangen").innerHTML = " " + data.empfangen;
-    document.querySelector("#restDaten").innerHTML = limit - (data.empfangen + data.gesendet) + " MB";
-    document.querySelector("#limit").innerHTML = " " + limit;
+    document.querySelector("#restDaten").innerHTML = data.transfertLimit - (data.empfangen + data.gesendet) + " MB";
+    document.querySelector("#limit").innerHTML = " " + data.transfertLimit;
 
     // config
-    document.querySelector("#select").selectedIndex = typeof data.selectedIndex !== "undefined" ? data.selectedIndex : 0;
+    document.querySelector("#select").selectedIndex = (typeof data.selectedIndex !== "undefined") ? data.selectedIndex : 0;
     if (typeof data.checkedRadio !== "undefined") {
       if (data.checkedRadio === 1) {
         document.querySelector("#radio1").checked = true;
         let input2 = document.querySelector("#input2");
         input2.disabled = true;
         input2.style.opacity = 0.3;
-      }
-      else if (data.checkedRadio === 2) {
+      } else if (data.checkedRadio === 2) {
         document.querySelector("#radio2").checked = true;
         let input1 = document.querySelector("#input1");
         input1.disabled = true;
@@ -119,13 +119,13 @@ document.querySelectorAll("#input1, #input2").forEach((element, index) => {
     let key = theEvent.keyCode || theEvent.which;
     key = String.fromCharCode(key);
     let regexMaxLength;
-    if( index === 0){
+    if (index === 0) {
       regexMaxLength = /^[0-9]{0,1}$/;
     } else {
       regexMaxLength = /^[0-9]{0,3}$/;
     }
-    let regexOnlyNumber =  /[0-9]/;
-    if ( !regexOnlyNumber.test(key) || !regexMaxLength.test(evt.target.value) ) {
+    let regexOnlyNumber = /[0-9]/;
+    if (!regexOnlyNumber.test(key) || !regexMaxLength.test(evt.target.value)) {
       theEvent.returnValue = false;
       if (theEvent.preventDefault) theEvent.preventDefault();
     }
@@ -141,19 +141,19 @@ document.querySelector("#save").addEventListener("click", (event) => {
   let value1 = parseInt(document.querySelector("#select").selectedIndex);
   let value2 = parseInt(document.querySelector("#radio1:checked, #radio2:checked").value);
   let value3;
-  if(document.querySelector("#input1").value !== ""){
+  if (document.querySelector("#input1").value !== "") {
     value3 = parseInt(document.querySelector("#input1").value);
   } else {
-    value3 = -1 ;
+    value3 = -1;
   }
   let value4;
-  if(document.querySelector("#input2").value !== ""){
+  if (document.querySelector("#input2").value !== "") {
     value4 = parseInt(document.querySelector("#input2").value);
   } else {
-    value4 = -1 ;
+    value4 = -1;
   }
-    
-  
+
+
   chrome.storage.sync.set({
     selectedIndex: value1,
     checkedRadio: value2,
@@ -199,14 +199,11 @@ if (hours >= 4 && hours < 10) {
   guten.innerHTML = "Guten Morgen..."
 } else if (hours >= 10 && hours < 18) {
   guten.innerHTML = "Guten Tag..."
-}
-else if (hours >= 18 && hours <= 22) {
+} else if (hours >= 18 && hours <= 22) {
   guten.innerHTML = "Guten Abend..."
-}
-else if (hours >= 22 && hours <= 23) {
+} else if (hours >= 22 && hours <= 23) {
   guten.innerHTML = "Gute Nacht..."
-}
-else {
+} else {
   guten.innerHTML = "Hi..."
 }
 
@@ -259,4 +256,3 @@ checkbox[1].addEventListener("click", () => {
 //       { code: 'document.body.style.backgroundColor = "' + color + '";' });
 //   });
 // };
-

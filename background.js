@@ -1,6 +1,30 @@
 'use strict';
 
+/**
+ * Active the Extension.
+ */
+chrome.runtime.onInstalled.addListener(function () {
+    chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
+        chrome.declarativeContent.onPageChanged.addRules([{
+            conditions: [new chrome.declarativeContent.PageStateMatcher({
+                // pageUrl: { urlMatches: "/*/" }
+            })],
+            actions: [new chrome.declarativeContent.ShowPageAction()]
+        }]);
+    });
+});
+
+createDiv();
+
+getTransfertDataFromServer();
+window.setInterval(function () {
+    getTransfertDataFromServer();
+}, 240000); // always with intervall of 3 Min.
+
 // (accompli) recuperer les donnees cotes serveur et enregistrer les donnees dans le local storage. 
+/**
+ * Create a display none DIV
+ */
 function createDiv() {
     let div = document.createElement("DIV");
     div.id = "displaynone";
@@ -10,14 +34,10 @@ function createDiv() {
 
     document.querySelector("body").appendChild(div);
 }
-createDiv();
 
-getTransfertDataFromServer();
-window.setInterval(function () {
-    getTransfertDataFromServer();
-}, 240000); // 3 minute.
-
-
+/**
+ * Send a Request to the Datavolumen Server.
+ */
 function getTransfertDataFromServer() {
     let xhttp = new XMLHttpRequest();
 
@@ -36,6 +56,11 @@ function getTransfertDataFromServer() {
 
 }
 
+/**
+ * save the Data in local storage
+ * 
+ * @param {XMLHttpRequest} xhttp 
+ */
 function saveData(xhttp) {
     document.querySelector("#displaynone").innerHTML = xhttp.responseText;
     const nameTemp = document.querySelector("#displaynone h3").firstChild.nodeValue;
@@ -73,6 +98,12 @@ function saveData(xhttp) {
 }
 
 // (accompli) mettre en place le system de notification.
+/**
+ * Affiche une notification quand certaines conditions sont remplis.
+ * 
+ * @param {number} restDaten - le reste de donnees. 
+ * @param {number} transfertLimit - la limite des donnees.
+ */
 function showNotification(restDaten, transfertLimit) {
     chrome.storage.sync.get([
             "checkedRadio",
@@ -90,7 +121,7 @@ function showNotification(restDaten, transfertLimit) {
                     });
                 }
                 if (percent > data.input1_Value) {
-                    clearAllNotification();
+                    clearAllNotifications();
                 }
             }
             if (typeof data.input2_Value !== "undefined" && data.input2_Value !== -1) {
@@ -101,21 +132,31 @@ function showNotification(restDaten, transfertLimit) {
                     });
                 }
                 if (restDaten > data.input2_Value) {
-                    clearAllNotification();
+                    clearAllNotifications();
                 }
             }
         });
 }
 
+/**
+ * Create a notification corresponding to the @param type.
+ * @param {number} type 
+ * @param {number} userThershold 
+ */
 function typeNotification(type, userThershold) {
     if (type === 1) {
-        createNotification("01", "Du hast jetzt weniger als " + userThershold + "% Datenvolumen.", true);
+        createNotification("01", "Du hast jetzt weniger als " + userThershold + "% Datenvolumen.");
     }
     if (type === 2) {
-        createNotification("02", "Du hast jetzt weniger als " + userThershold + "MB Datenvolumen.", true);
+        createNotification("02", "Du hast jetzt weniger als " + userThershold + " MB Datenvolumen.");
     }
 }
 
+/**
+ *  Create a notification
+ * @param {number} id 
+ * @param {string} message 
+ */
 function createNotification(id, message) {
     chrome.notifications.create(id, {
         type: "basic",
@@ -127,7 +168,10 @@ function createNotification(id, message) {
     });
 }
 
-function clearAllNotification() {
+/**
+ * clear all notifications.
+ */
+function clearAllNotifications() {
     for (let i = 1; i < 3; i++) {
         chrome.notifications.clear("0" + i);
     }
@@ -135,14 +179,3 @@ function clearAllNotification() {
         isNotificationAlreadyShow: false
     });
 }
-
-chrome.runtime.onInstalled.addListener(function () {
-    chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
-        chrome.declarativeContent.onPageChanged.addRules([{
-            conditions: [new chrome.declarativeContent.PageStateMatcher({
-                // pageUrl: { urlMatches: "/*/" }
-            })],
-            actions: [new chrome.declarativeContent.ShowPageAction()]
-        }]);
-    });
-});

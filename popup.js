@@ -6,7 +6,6 @@
 // "name",
 // "gesendet",
 // "empfangen",
-// "selectedIndex",
 // "checkedRadio",
 // "input1_Value",
 // "input2_Value"
@@ -16,7 +15,6 @@ chrome.storage.sync.get([
     "name",
     "gesendet",
     "empfangen",
-    "selectedIndex",
     "checkedRadio",
     "input1_Value",
     "input2_Value",
@@ -34,7 +32,6 @@ chrome.storage.sync.get([
     document.querySelector("#limit").innerHTML = " " + data.transfertLimit;
 
     // config
-    document.querySelector("#select").selectedIndex = (typeof data.selectedIndex !== "undefined") ? data.selectedIndex : 0;
     if (typeof data.checkedRadio !== "undefined") {
       if (data.checkedRadio === 1) {
         document.querySelector("#radio1").checked = true;
@@ -138,7 +135,6 @@ document.querySelectorAll("#input1, #input2").forEach((element, index) => {
 document.querySelector("#save").addEventListener("click", (event) => {
   var doneIcon = event.target.nextElementSibling;
   doneIcon.style.visibility = "visible";
-  let value1 = parseInt(document.querySelector("#select").selectedIndex);
   let value2 = parseInt(document.querySelector("#radio1:checked, #radio2:checked").value);
   let value3;
   if (document.querySelector("#input1").value !== "") {
@@ -155,7 +151,6 @@ document.querySelector("#save").addEventListener("click", (event) => {
 
 
   chrome.storage.sync.set({
-    selectedIndex: value1,
     checkedRadio: value2,
     input1_Value: value3,
     input2_Value: value4
@@ -171,12 +166,10 @@ document.querySelector("#save").addEventListener("click", (event) => {
 document.querySelector("#reset").addEventListener("click", (event) => {
   var doneIcon = event.target.nextElementSibling;
   doneIcon.style.visibility = "visible";
-  document.querySelector("#select").selectedIndex = 0;
   document.querySelector("#radio1").checked = true;
   document.querySelector("#input1").value = "";
   document.querySelector("#input2").value = "";
   chrome.storage.sync.set({
-    selectedIndex: 0,
     checkedRadio: 1,
     input1_Value: -1,
     input2_Value: -1

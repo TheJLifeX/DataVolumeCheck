@@ -75,7 +75,6 @@ function saveData(xhttp) {
 // (accompli) mettre en place le system de notification.
 function showNotification(restDaten, transfertLimit) {
     chrome.storage.sync.get([
-            "selectedIndex",
             "checkedRadio",
             "input1_Value",
             "input2_Value",

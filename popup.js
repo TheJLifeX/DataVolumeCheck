@@ -142,9 +142,8 @@ document.querySelector("#save").addEventListener("click", (event) => {
 
 // (accompli) reset button tout ce qui l entoure
 document.querySelector("#reset").addEventListener("click", (event) => {
-  var doneIcon = event.target.nextElementSibling;
+  const doneIcon = event.target.nextElementSibling;
   doneIcon.style.visibility = "visible";
-  document.querySelector("#radio1").checked = true;
   document.querySelector("#input1").value = "";
   document.querySelector("#input2").value = "";
   chrome.storage.sync.set({

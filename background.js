@@ -1,6 +1,8 @@
 'use strict';
 
-let serverNotConnected = true;
+let serverNotConnected = false;
+let windowPopup;
+const timeoutToShowModal = 10000;
 /**
  * Active the Extension.
  */
@@ -31,9 +33,18 @@ chrome.extension.onConnect.addListener(function (port) {
                 type: "popup"
             });
             for (var i = 0; i < views.length; i++) {
-                const element = views[i].document.getElementById('input1');
-                console.log(element);
+                windowPopup = views[i];
             }
+            const buttonToOpenModal = windowPopup.document.querySelector('#buttonToOpenModal');
+            if (typeof buttonToOpenModal !== "undefined") {
+                buttonToOpenModal.click();
+            }
+            window.setTimeout(() => {
+                let myModal = windowPopup.document.querySelector('#myModal');
+                if (typeof myModal !== "undefined") {
+                    myModal.style.display = "none";
+                }
+            }, timeoutToShowModal);
         }
     });
 });

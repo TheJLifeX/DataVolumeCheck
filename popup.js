@@ -206,6 +206,55 @@ checkbox[1].addEventListener("click", () => {
   input1.style.opacity = 0.3;
 });
 
+/****************************** JS for the modal *************************/
+
+// Get the modal
+const myModal = document.querySelector('#myModal');
+
+// Get the button that opens the modal
+const buttonToOpenModal = document.querySelector("#buttonToOpenModal");
+
+// When the user clicks the button, open the modal 
+if (typeof buttonToOpenModal !== "undefined") {
+  buttonToOpenModal.addEventListener("click", () => {
+    myModal.style.display = "block";
+
+    const text = 'Ausserhalb des DorfNetz oder Keine Internetverbindung.';
+    const selector = '#modalForModal';
+    const speed = 50;
+    let index = 0;
+    document.querySelector(selector).innerHTML = "";
+    typeWriter();
+    /**
+     * create a typing effect
+     * 
+     * @param {string} selector - The selector of the target element.
+     * @param {string} text - The text to write in teh target element.
+     * @param {number} speed - The speed for writing.
+     */
+    function typeWriter() {
+      const element = document.querySelector(selector);
+      if (typeof element !== "undefined") {
+        if (index < text.length) {
+          element.innerHTML += text.charAt(index);
+          index++;
+          //        Knak punkt
+          setTimeout(typeWriter, speed);
+        }
+      }
+    }
+  });
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function (event) {
+  if (event.target == myModal) {
+    myModal.style.display = "none";
+  }
+}
+
+/*******************************************************/
+
 // (accompli) changement de couleur lorsque le pourcentage est dessous de 25.
 /**
  * show a progress circle corresponding to the  @param percent

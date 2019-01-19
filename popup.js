@@ -10,6 +10,11 @@
 // "userNotificationValueInPercent",
 // "userNotificationValueInMB"
 
+const port = chrome.extension.connect({
+  name: "Sample Communication"
+});
+port.postMessage("Popup is now visible!");
+
 // (accompli) recuper les donnes dans le local storage et afficher les donnees.
 chrome.storage.sync.get([
     "name",

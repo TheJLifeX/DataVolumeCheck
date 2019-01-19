@@ -1,5 +1,6 @@
 'use strict';
 
+let serverNotConnected = true;
 /**
  * Active the Extension.
  */
@@ -20,6 +21,22 @@ getTransfertDataFromServer();
 window.setInterval(function () {
     getTransfertDataFromServer();
 }, 240000); // always with intervall of 3 Min.
+
+// chaque fois que le popup s'ouvre cette fonction sera appelle.
+chrome.extension.onConnect.addListener(function (port) {
+    port.onMessage.addListener(function (message) {
+        console.log("message recieved from popup: " + message);
+        if (serverNotConnected) {
+            const views = chrome.extension.getViews({
+                type: "popup"
+            });
+            for (var i = 0; i < views.length; i++) {
+                const element = views[i].document.getElementById('input1');
+                console.log(element);
+            }
+        }
+    });
+});
 
 // (accompli) recuperer les donnees cotes serveur et enregistrer les donnees dans le local storage. 
 /**
@@ -48,8 +65,10 @@ function getTransfertDataFromServer() {
     };
 
     // TODO Afficher une information a l'utilisateur lorsqu'il ne se trouve pas dans le dorfnetz.
-    xhttp.onerror = function (event) {
-        console.log("Der Request dauert zu lange!");
+    xhttp.onerror = function () {
+        serverNotConnected = true;
+        console.log("Der Request dauert zu lange! :: ",
+            "Du bist wahrscheinlich nicht im Dorf oder Du hast hast keine Internetverbindung.");
     };
     xhttp.open("GET", "http://10.4.11.1/traffic.php", true);
     xhttp.send();

@@ -149,15 +149,19 @@ document.querySelector("#save").addEventListener("click", (event) => {
 document.querySelector("#reset").addEventListener("click", (event) => {
   const doneIcon = event.target.nextElementSibling;
   doneIcon.style.visibility = "visible";
-  document.querySelector("#input1").value = "";
+  document.querySelector("#input1").value = 25;
   document.querySelector("#input2").value = "";
   chrome.storage.sync.set({
     checkedRadio: 1,
-    userNotificationValueInPercent: -1,
+    userNotificationValueInPercent: 25,
     userNotificationValueInMB: -1,
     isNotificationAlreadyShow: false
   }, function () {
-    console.log('User Config reset');
+    const checkbox = document.querySelector(".form-check-input");
+    if (typeof checkbox !== "undefined") {
+      checkbox.click();
+    }
+
   });
   window.setTimeout(() => {
     doneIcon.style.visibility = "hidden";

@@ -22,7 +22,7 @@ createDiv();
 getTransfertDataFromServer();
 window.setInterval(function () {
     getTransfertDataFromServer();
-}, 240000); // always with intervall of 3 Min.
+}, 60000); // always with intervall of 1 Min.
 
 // chaque fois que le popup s'ouvre cette fonction sera appelle.
 chrome.extension.onConnect.addListener(function (port) {
@@ -67,6 +67,8 @@ function createDiv() {
  * Send a Request to the Datavolumen Server.
  */
 function getTransfertDataFromServer() {
+    serverNotConnected = false;
+
     let xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function () {

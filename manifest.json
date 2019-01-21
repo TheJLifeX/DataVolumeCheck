@@ -1,7 +1,7 @@
 {
-  "name": "Datenvolumen Extension",
+  "name": "DataVolumeCheck",
   "version": "1.0",
-  "description": "Hiermit kannst du deinen aktuellen Datenverbrauch ( z.B. von dem 10 Gb pro Woche) ansehen.",
+  "description": "Hiermit kannst du deinen aktuellen Datenverbrauch ( z.B. von dem 10 Gb pro Woche) ansehen. Dortmund Universität Wohnheime Datenvolumen-prüfen Chrome Extension.",
   "permissions": [
     "activeTab",
     "declarativeContent",

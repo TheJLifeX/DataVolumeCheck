@@ -27,14 +27,19 @@ chrome.storage.sync.get([
   ],
   function (data) {
     console.log(data);
+    if (typeof data.empfangen !== "undefined" && typeof data.gesendet !== "undefined" && typeof data.transfertLimit !== "undefined") {
+      const percent = 100 - (Math.round((data.empfangen + data.gesendet) * 100 / data.transfertLimit));
+      showProgressCircle(percent);
+      document.querySelector("#restDaten").innerHTML = data.transfertLimit - (data.empfangen + data.gesendet) + " MB";
+    } else {
+      showProgressCircle(0);
+      document.querySelector("#restDaten").innerHTML = "";
+    }
 
-    const percent = 100 - (Math.round((data.empfangen + data.gesendet) * 100 / data.transfertLimit));
-    showProgressCircle(percent);
-    document.querySelector("#name").innerHTML = data.name;
-    document.querySelector("#gesendet").innerHTML = " " + data.gesendet;
-    document.querySelector("#empfangen").innerHTML = " " + data.empfangen;
-    document.querySelector("#restDaten").innerHTML = data.transfertLimit - (data.empfangen + data.gesendet) + " MB";
-    document.querySelector("#limit").innerHTML = " " + data.transfertLimit;
+    document.querySelector("#name").innerHTML = (typeof data.name !== "undefined") ? data.name : "";
+    document.querySelector("#gesendet").innerHTML = (typeof data.gesendet !== "undefined") ? " " + data.gesendet : "0";
+    document.querySelector("#empfangen").innerHTML = (typeof data.empfangen !== "undefined") ? " " + data.empfangen : "0";
+    document.querySelector("#limit").innerHTML = (typeof data.transfertLimit !== "undefined") ? " " + data.transfertLimit : "0";
 
     // config
     if (typeof data.checkedRadio !== "undefined") {
